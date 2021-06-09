@@ -1,4 +1,7 @@
 @import './variables.scss';
+@import './theme.scss';
+// @import './theme_1.scss';
+// @import './theme_2.scss';
 // @import './slider-style.scss';
 
 /*////////////////////////////////////////////////////////////
@@ -7,7 +10,24 @@
 
 body{
     margin: 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: $font-family;
+    user-select: none;
+    color: $main-color-t2;
+    &.theme_1{
+        @include bodyStyling($terminal: true, $windows-theme: false, $test-1: false, $test-2: false);
+    }
+
+    &.theme_2{
+        @include bodyStyling($terminal: false, $windows-theme: true, $test-1: false, $test-2: false);
+    }
+
+    &.theme_3{
+        @include bodyStyling($terminal: false, $windows-theme: false, $test-1: true, $test-2: false);
+    }
+
+    &.theme_4{
+        @include bodyStyling($terminal: false, $windows-theme: false, $test-1: false, $test-2: true);
+    }
 }
 
 h3{
@@ -24,11 +44,24 @@ h4{
 
 header{
     height: $footer-header-height;
-    background: linear-gradient(to right, #1e3c72, #2a5298);
-    color: white;
     display: flex;
     align-items: center;
-    box-shadow: inset 0 0 2vw white;
+
+    &.theme_1{
+        @include headerFooterStyling($terminal: true, $windows-theme: false, $test-1: false, $test-2: false);
+    }
+
+    &.theme_2{
+        @include headerFooterStyling($terminal: false, $windows-theme: true, $test-1: false, $test-2: false);
+    }
+
+    &.theme_3{
+        @include headerFooterStyling($terminal: false, $windows-theme: false, $test-1: true, $test-2: false);
+    }
+
+    &.theme_4{
+        @include headerFooterStyling($terminal: false, $windows-theme: false, $test-1: false, $test-2: true);
+    }
 
     #generate_new_array {
         display: flex;
@@ -36,13 +69,28 @@ header{
         align-items: center;
         width: 15%;
         height: 100%;
-        border-right: 0.3vw double white;
+
+        &.theme_1{
+            @include border-right-color($terminal: true, $windows-theme: false, $test-1: false, $test-2: false);
+        }
+
+        &.theme_2{
+            @include border-right-color($terminal: false, $windows-theme: true, $test-1: false, $test-2: false);
+        }
+
+        &.theme_3{
+        @include border-right-color($terminal: false, $windows-theme: false, $test-1: true, $test-2: false);
+    }
+
+    &.theme_4{
+        @include border-right-color($terminal: false, $windows-theme: false, $test-1: false, $test-2: true);
+    }
 
         h3{
             margin: 0;
             
             &:hover{
-                color: crimson;
+                color: $button-hover-color;
                 cursor: pointer;
             }
         }
@@ -54,7 +102,22 @@ header{
         align-items: center;
         width: 35%;
         height: 100%;
-        border-right: 0.3vw double white;
+
+        &.theme_1{
+            @include border-right-color($terminal: true, $windows-theme: false, $test-1: false, $test-2: false);
+        }
+
+        &.theme_2{
+            @include border-right-color($terminal: false, $windows-theme: true, $test-1: false, $test-2: false);
+        }
+        
+        &.theme_3{
+            @include border-right-color($terminal: false, $windows-theme: false, $test-1: true, $test-2: false);
+        }
+
+        &.theme_4{
+            @include border-right-color($terminal: false, $windows-theme: false, $test-1: false, $test-2: true);
+        }
 
         input{
             margin-left: 1vw;
@@ -69,16 +132,44 @@ header{
         align-items: center;
         width: 30%;
         height: 100%;
-        border-right: 0.3vw double white;
+
+        &.theme_1{
+            @include border-right-color($terminal: true, $windows-theme: false, $test-1: false, $test-2: false);
+        }
+
+        &.theme_2{
+            @include border-right-color($terminal: false, $windows-theme: true, $test-1: false, $test-2: false);
+        }
+
+        &.theme_3{
+            @include border-right-color($terminal: false, $windows-theme: false, $test-1: true, $test-2: false);
+        }
+
+        &.theme_4{
+            @include border-right-color($terminal: false, $windows-theme: false, $test-1: false, $test-2: true);
+        }
 
         #sorting_algorithm_select{
             margin-left: 1vw;
             font-size: $h4-font-size;
-            border: .1vw solid white;
             outline: none;
-            background-color: rgb(50, 53, 205);
-            color: white;
             padding: .5vw;
+
+            &.theme_1{
+                @include sorting-algorithm-select($terminal: true, $windows-theme: false, $test-1: false, $test-2: false);
+            }
+
+            &.theme_2{
+                @include sorting-algorithm-select($terminal: false, $windows-theme: true, $test-1: false, $test-2: false);
+            }
+
+            &.theme_3{
+                @include sorting-algorithm-select($terminal: false, $windows-theme: false, $test-1: true, $test-2: false);
+            }
+
+            &.theme_4{
+                @include sorting-algorithm-select($terminal: false, $windows-theme: false, $test-1: false, $test-2: true);
+            }
         }
     }
 
@@ -90,7 +181,7 @@ header{
         height: 100%;
 
         &:hover{
-            color: crimson;
+            color: $button-hover-color;
             cursor: pointer;
         }
     }
@@ -99,10 +190,25 @@ header{
 
 section{
     height: calc(100% - 2 * #{$footer-header-height});
-    background-color: #2C1775;
-    box-shadow: inset 0 0 3vw rgb(0, 0, 0);
     padding-top: 1vw;
     box-sizing: border-box;
+    position: relative;
+
+    &.theme_1{
+        @include section-styling($terminal: true, $windows-theme: false, $test-1: false, $test-2: false);
+    }
+
+    &.theme_2{
+        @include section-styling($terminal: false, $windows-theme: true, $test-1: false, $test-2: false);
+    }
+
+    &.theme_3{
+        @include section-styling($terminal: false, $windows-theme: false, $test-1: true, $test-2: false);
+    }
+
+    &.theme_4{
+        @include section-styling($terminal: false, $windows-theme: false, $test-1: false, $test-2: true);
+    }
     
     #sorting_array_container{
         width: 80%;
@@ -112,12 +218,63 @@ section{
         justify-content: center;
 
         .visual_array_item{
-            color: white;
             text-align: center;
             padding-top: 1vw;
-            background-color: rgb(89, 89, 173);
-            margin: 0 .1vw;
             font-size: 1vw;
+            text-shadow: 0.1vw 0.1vw black;
+
+            &.theme_1{
+                @include single-item-styling($terminal: true, $windows-theme: false, $test-1: false, $test-2: false);
+            }
+
+            &.theme_2{
+                @include single-item-styling($terminal: false, $windows-theme: true, $test-1: false, $test-2: false);
+            }
+
+            &.theme_3{
+                @include single-item-styling($terminal: false, $windows-theme: false, $test-1: true, $test-2: false);
+            }
+
+            &.theme_4{
+                @include single-item-styling($terminal: false, $windows-theme: false, $test-1: false, $test-2: true);
+            }
+        }
+    }
+
+    #change_sorting_speed{
+        position: absolute;
+        bottom: 1%;
+        left: 5%;
+        width: 30%;
+        text-align: center;
+
+        h3{
+            margin: 0;
+        }
+
+        input{
+            width: 100%;
+        }
+    }
+
+    .themes_container{
+        position: absolute;
+        bottom: 3%;
+        right: 1%;
+        display: flex;
+
+        & > div{
+            margin: 0 1vw;
+            text-align: center;
+
+            &:hover{
+                color: $button-hover-color;
+            }
+        }
+
+        .themes{
+            width: 7vw;
+            height: 3vw;
         }
     }
 }
@@ -125,12 +282,25 @@ section{
 
 footer{
     height: $footer-header-height;
-    background: linear-gradient(to right, #1e3c72, #2a5298);
-    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: inset 0 0 2vw white;
+
+    &.theme_1{
+        @include headerFooterStyling($terminal: true, $windows-theme: false, $test-1: false, $test-2: false);
+    }
+
+    &.theme_2{
+        @include headerFooterStyling($terminal: false, $windows-theme: true, $test-1: false, $test-2: false);
+    }
+
+    &.theme_3{
+        @include headerFooterStyling($terminal: false, $windows-theme: false, $test-1: true, $test-2: false);
+    }
+
+    &.theme_4{
+        @include headerFooterStyling($terminal: false, $windows-theme: false, $test-1: false, $test-2: true);
+    }
 }
 
 /*////////////////////////////////////////////////////////////
@@ -148,13 +318,42 @@ footer{
         #generate_new_array {
             width: calc(50% - 0.3vw);
             height: 50%;
-            border-bottom: 0.1vw solid white;
+            &.theme_1{
+                @include border-right-color($terminal: true, $windows-theme: false, $test-1: false, $test-2: false);
+            }
+
+            &.theme_2{
+                @include border-right-color($terminal: false, $windows-theme: true, $test-1: false, $test-2: false);
+            }
+
+            &.theme_3{
+                @include border-right-color($terminal: false, $windows-theme: false, $test-1: true, $test-2: false);
+            }
+
+            &.theme_4{
+                @include border-right-color($terminal: false, $windows-theme: false, $test-1: false, $test-2: true);
+            }
         }
 
         #change_array_size_and_speed{
             width: calc(50% - 0.3vw);
             height: 50%;
-            border-bottom: 0.1vw solid white;
+            &.theme_1{
+                @include border-right-color($terminal: true, $windows-theme: false, $test-1: false, $test-2: false);
+            }
+
+            &.theme_2{
+                @include border-right-color($terminal: false, $windows-theme: true, $test-1: false, $test-2: false);
+            }
+
+            &.theme_3{
+                @include border-right-color($terminal: false, $windows-theme: false, $test-1: true, $test-2: false);
+            }
+
+            &.theme_4{
+                @include border-right-color($terminal: false, $windows-theme: false, $test-1: false, $test-2: true);
+            }
+            
         }
 
         #sorting_algorithms{
@@ -192,27 +391,69 @@ footer{
         height: 7 * $footer-header-height;
 
         #generate_new_array {
-            // width: calc(50% - 0.3vw);
             width: 100%;
             border-right: 0;
             height: 25%;
-            border-bottom: 0.1vw solid white;
+
+            &.theme_1{
+                @include border-right-color($terminal: true, $windows-theme: false, $test-1: false, $test-2: false);
+            }
+
+            &.theme_2{
+                @include border-right-color($terminal: false, $windows-theme: true, $test-1: false, $test-2: false);
+            }
+
+            &.theme_3{
+                @include border-right-color($terminal: false, $windows-theme: false, $test-1: true, $test-2: false);
+            }
+
+            &.theme_4{
+                @include border-right-color($terminal: false, $windows-theme: false, $test-1: false, $test-2: true);
+            }
         }
 
         #change_array_size_and_speed{
-            // width: calc(50% - 0.3vw);
             width: 100%;
             border-right: 0;
             height: 25%;
-            border-bottom: 0.1vw solid white;
+
+            &.theme_1{
+                @include border-right-color($terminal: true, $windows-theme: false, $test-1: false, $test-2: false);
+            }
+
+            &.theme_2{
+                @include border-right-color($terminal: false, $windows-theme: true, $test-1: false, $test-2: false);
+            }
+
+            &.theme_3{
+                @include border-right-color($terminal: false, $windows-theme: false, $test-1: true, $test-2: false);
+            }
+
+            &.theme_4{
+                @include border-right-color($terminal: false, $windows-theme: false, $test-1: false, $test-2: true);
+            }
         }
 
         #sorting_algorithms{
-            // width: calc(50% - 0.3vw);
             width: 100%;
             border-right: 0;
             height: 25%;
-            border-bottom: 0.1vw solid white;
+
+            &.theme_1{
+                @include border-right-color($terminal: true, $windows-theme: false, $test-1: false, $test-2: false);
+            }
+
+            &.theme_2{
+                @include border-right-color($terminal: false, $windows-theme: true, $test-1: false, $test-2: false);
+            }
+
+            &.theme_3{
+                @include border-right-color($terminal: false, $windows-theme: false, $test-1: true, $test-2: false);
+            }
+
+            &.theme_4{
+                @include border-right-color($terminal: false, $windows-theme: false, $test-1: false, $test-2: true);
+            }
 
             #sorting_algorithm_select{
                 margin-left: 2vw;
@@ -221,11 +462,25 @@ footer{
         }
 
         #start_sort{
-            // width: calc(50% - 0.3vw);
-            border-bottom: 0.1vw solid white;
             width: 100%;
             border-right: 0;
             height: 25%;
+
+            &.theme_1{
+                @include border-right-color($terminal: true, $windows-theme: false, $test-1: false, $test-2: false);
+            }
+
+            &.theme_2{
+                @include border-right-color($terminal: false, $windows-theme: true, $test-1: false, $test-2: false);
+            }
+
+            &.theme_3{
+                @include border-right-color($terminal: false, $windows-theme: false, $test-1: true, $test-2: false);
+            }
+
+            &.theme_4{
+                @include border-right-color($terminal: false, $windows-theme: false, $test-1: false, $test-2: true);
+            }
         }
     }
 

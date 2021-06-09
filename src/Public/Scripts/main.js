@@ -3,56 +3,69 @@
 /////////////////////////////////////////////*/
 let array = [];
 let arraySize = Number($('#array_range').val());
-let visualArrayItem = '';
-let singleItemWidth, singleItemHeight;
 let sortType;
+let sortingSpeedMax = $('#sorting_speed').attr('max')
 let bubbleSorted = false;
 let allTrue = true;
-const staticColor = "#5959ad";
-const checkingColor = "orange";
-const wrongColor = "crimson";
-const allCorrectColor = "green";
-const correctedColor = "yellowgreen";
 let sorting = false;
-let timer = ms => new Promise(res => setTimeout(res, ms))
 let time;
-
+let staticColor = "#5959ad";
+let checkingColor = "orange";
+let wrongColor = "crimson";
+let allCorrectColor = "green";
+let correctedColor = "yellowgreen";
+let array_max_number_limit = 181;
+let array_min_number_limit = 20;
+let dom_item_height_multiplier = 90 / ( array_max_number_limit + 20 )
+let stopSorting = true
 
 /*/////////////////////////////////////////////
                DECLARE  FUNCTIONS
 /////////////////////////////////////////////*/
 
+let timer = ms => new Promise(res => setTimeout(res, ms))  // Timer that indicates the await time
+
 function createArray() {
+    let theme_class = $('body').attr('class');
+
     for (let i = arraySize; i > 0; i--){
-        let rndNum = Math.floor(Math.random() * 500) + 20;
+        let rndNum = Math.floor(Math.random() * array_max_number_limit) + array_min_number_limit; // Generates random numbers in this range [20; 500]
+        let visualArrayItem = '';
         array.push(rndNum);
         if (arraySize <= 30) {
-            visualArrayItem += `<div class="visual_array_item" id="item_${i}">${rndNum}</div>`;
+            visualArrayItem += `<div class="visual_array_item ${theme_class}" id="item_${i}">${rndNum}</div>`;
         } else {
-            visualArrayItem += `<div class="visual_array_item" id="item_${i}"></div>`;
+            visualArrayItem += `<div class="visual_array_item ${theme_class}" id="item_${i}"></div>`;
         }
         $('#sorting_array_container').append(visualArrayItem);
-        singleItemHeight = 0.17 * + rndNum + "%";
-        $(`#item_${i}`).css({ "height": singleItemHeight})
+        definingItemsHeight(i, rndNum)
         visualArrayItem = ""
     };
-    
-    singleItemWidth = 100 / arraySize + "%";
-    $('.visual_array_item').css({
-        'width': singleItemWidth,
-    })
+
+    definingItemsWidth();
 };
+
+function definingItemsWidth() {
+    let singleItemWidth = 100 / arraySize + "%";
+    $('.visual_array_item').css({ 'width': singleItemWidth, })
+}
+
+function definingItemsHeight(index, randNum) {
+    let singleItemHeight = dom_item_height_multiplier * + randNum + "%";
+    $(`#item_${index}`).css({ "height": singleItemHeight })
+}
 
 function removeArray() {
     array = [];
     visualArrayItem = '';
     $('.visual_array_item').remove();
+    $('#array_range').attr("disabled", false);
     sorting = false;
+    stopSorting = true
 }
 
 function arraySizeChanged() {
     arraySize = Number($('#array_range').val());
-    time = (100 - $('#array_range').val()) * 100;
     if (arraySize > 0 && arraySize < 20) {
         $('.visual_array_item').css({ 'transition': '.2s' })
         time = 200
@@ -69,14 +82,31 @@ function arraySizeChanged() {
         $('.visual_array_item').css({ 'transition': 0 })
         time = 1
     }
+
+    $('#sorting_speed').val(sortingSpeedMax - time);
 };
 
 function getValueOfSortSelect() {
     sortType = $('#sorting_algorithm_select').val();
 }
 
+function arraySortingSpeedChanged() {
+    time = sortingSpeedMax - Number($('#sorting_speed').val());
+}
+
+function itemColoring(index, color, color_2, DOM) {
+    $(DOM[index]).css({ "backgroundColor": color });
+    $(DOM[index + 1]).css({ "backgroundColor": color_2 });
+}
+
+function itemDetachAndAttach(index, DOM) {
+    let detachedElem = $(DOM[index]).detach();
+    $(detachedElem).insertAfter($(DOM[index + 1]));
+}
+
 function Sort() {
     if (sorting) return
+    stopSorting = false
     $('#array_range').attr("disabled", true);
     sorting = true;
     getValueOfSortSelect();
@@ -93,75 +123,44 @@ function Sort() {
 
 }
 
-function bubbleSort() {
-    let domElements = $('.visual_array_item');
-    let sortedCount = 1;
-
-    while (!bubbleSorted) {
-        for (let i = 0; i < array.length - sortedCount; i++) {
-            if (array[i] > array[i + 1]) {
-                let detachedElem = $(domElements[i]).detach();
-                $(detachedElem).insertAfter($(domElements[i+1]));
-                domElements = $('.visual_array_item');
-                allTrue = false;
-                let arrItem = array[i + 1];
-                array[i + 1] = array[i];
-                array[i] = arrItem
-            }
-        }
-        if (allTrue) {
-            bubbleSorted = true;
-        }
-        allTrue = true;
-        sortedCount++
-    }
-
-    sortedCount = 1;
-    $('.visual_array_item').css({ "backgroundColor": allCorrectColor })
-    bubbleSorted = false;
-}
-
-
 async function bubbleSort() {
     let domElements = $('.visual_array_item');
     let sortedCount = 1;
 
     while (!bubbleSorted) {
         for (let i = 0; i < array.length - sortedCount; i++) {
-            $(domElements[i]).css({ "backgroundColor": checkingColor });
-            $(domElements[i + 1]).css({ "backgroundColor": checkingColor });
+            if (stopSorting) return
+
+            itemColoring(i, checkingColor, checkingColor, domElements) // Coloring items in array that are being checked
             await timer(time);
 
             if (array[i] > array[i + 1]) {
-                $(domElements[i]).css({ "backgroundColor": wrongColor });
-                $(domElements[i + 1]).css({ "backgroundColor": wrongColor });
+                itemColoring(i, wrongColor, wrongColor, domElements) // Coloring items in array that were wrong placed
                 await timer(time);
 
-                let detachedElem = $(domElements[i]).detach();
-                $(detachedElem).insertAfter($(domElements[i + 1]));
-                domElements = $('.visual_array_item');
+                itemDetachAndAttach(i, domElements)
+                domElements = $('.visual_array_item'); // Reassigning dom elements array to match dom
                 await timer(time);
-                $(domElements[i]).css({ "backgroundColor": correctedColor });
-                $(domElements[i + 1]).css({ "backgroundColor": correctedColor });
+
+                itemColoring(i, correctedColor, correctedColor, domElements) // Coloring items in array that were fixed and placed correctly
                 await timer(time);
+
                 allTrue = false;
-                let arrItem = array[i + 1];
+                let arrItem = array[i + 1]; // Changing array items correspondingly
                 array[i + 1] = array[i];
                 array[i] = arrItem
 
             } else {
-                $(domElements[i]).css({ "backgroundColor": correctedColor });
-                $(domElements[i + 1]).css({ "backgroundColor": correctedColor });
+                itemColoring(i, correctedColor, correctedColor, domElements) // Coloring items in array that were already placed correctly
                 await timer(time);
             }
 
+            //Checking if the biggest item is at the end and coloring
             if (i == array.length - sortedCount - 1) {
-                $(domElements[i]).css({ "backgroundColor": staticColor });
-                $(domElements[i + 1]).css({ "backgroundColor": allCorrectColor });
+                itemColoring(i, staticColor, allCorrectColor, domElements) // Coloring item in array that was placed at the end
                 await timer(time);
             } else {
-                $(domElements[i]).css({ "backgroundColor": staticColor });
-                $(domElements[i + 1]).css({ "backgroundColor": staticColor });
+                itemColoring(i, staticColor, staticColor, domElements) // Coloring items in array that were already checked and placed correctyl
                 await timer(time);
             }
             
@@ -178,21 +177,74 @@ async function bubbleSort() {
     bubbleSorted = false;
     sorting = false;
     $('#array_range').attr("disabled", false);
-
 }
 
-function mergeSort() {
-    console.log('mergeSort')
+
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+async function mergeSort() {
+    let domElements = $('.visual_array_item');
 }
 
-function heapSort() {
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+
+
+async function heapSort() {
     console.log('heapSort')
 }
 
-function quickSort() {
+async function quickSort() {
     console.log('quickSort')
 }
 
+function changeTheme(theme) {
+    $('.theme_1').removeClass('theme_1')
+    $('.theme_2').removeClass('theme_2')
+    $('.theme_3').removeClass('theme_3')
+    $('.theme_4').removeClass('theme_4')
+
+    $('body').addClass(theme);
+    $('header').addClass(theme);
+    $('#generate_new_array').addClass(theme);
+    $('#change_array_size_and_speed').addClass(theme);
+    $('#sorting_algorithms').addClass(theme);
+    $('#sorting_algorithm_select').addClass(theme);
+    $('#start_sort').addClass(theme);
+    $('#sorting_array_section').addClass(theme);
+    $('#sorting_array_container').addClass(theme);
+    $('footer').addClass(theme);
+    $('.visual_array_item').addClass(theme);
+
+    if (theme == "theme_1") {
+        staticColor = "white";
+        checkingColor = "lightgrey";
+        wrongColor = "darkgrey";
+        allCorrectColor = "green";
+        correctedColor = "yellowgreen";
+    } else if (theme == "theme_2") {
+        staticColor = "#5959ad";
+        checkingColor = "orange";
+        wrongColor = "crimson";
+        allCorrectColor = "green";
+        correctedColor = "yellowgreen";
+    } else if (theme == "theme_3") {
+        staticColor = "#5959ad";
+        checkingColor = "orange";
+        wrongColor = "crimson";
+        allCorrectColor = "green";
+        correctedColor = "yellowgreen";
+    } else if (theme == "theme_4") {
+        staticColor = "#5959ad";
+        checkingColor = "orange";
+        wrongColor = "crimson";
+        allCorrectColor = "green";
+        correctedColor = "yellowgreen";
+    }
+}
 
 /*//////////////////////////////////////////////
                CALLING FUNCTIONS
@@ -206,10 +258,18 @@ $(document).on('input', '#array_range', function () {
     createArray();
 });
 
+$(document).on('input', '#sorting_speed', function () {
+    arraySortingSpeedChanged();
+});
+
 $('#generate_new_array').on('click', () => {
-    if (sorting) return
     removeArray();
     createArray();
 })
 
 $("#start_sort").on('click', Sort)
+
+$('.themes').on('click', e => {
+    let theme = $(e.currentTarget).attr("id");
+    changeTheme(theme);
+})

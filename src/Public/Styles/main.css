@@ -3,7 +3,17 @@
 ////////////////////////////////////////////////////////////*/
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif; }
+  font-family: "Roboto", sans-serif;
+  user-select: none;
+  color: white; }
+  body.theme_1 {
+    color: #4AF626; }
+  body.theme_2 {
+    color: white; }
+  body.theme_3 {
+    color: #9fb4e6; }
+  body.theme_4 {
+    color: #fb3640; }
 
 h3 {
   font-size: 1.4vw; }
@@ -16,18 +26,34 @@ h4 {
 ////////////////////////////////////////////////////////////*/
 header {
   height: 5vw;
-  background: linear-gradient(to right, #1e3c72, #2a5298);
-  color: white;
   display: flex;
-  align-items: center;
-  box-shadow: inset 0 0 2vw white; }
+  align-items: center; }
+  header.theme_1 {
+    background: linear-gradient(#000000, #23241f);
+    box-shadow: inset 0 0 2vw white; }
+  header.theme_2 {
+    background: linear-gradient(to right, #1e3c72, #2a5298);
+    box-shadow: inset 0 0 2vw white; }
+  header.theme_3 {
+    background: #f55c47;
+    box-shadow: inset 0 0 2vw white; }
+  header.theme_4 {
+    background: #fdca40;
+    box-shadow: inset 0 0 2vw white; }
   header #generate_new_array {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 15%;
-    height: 100%;
-    border-right: 0.3vw double white; }
+    height: 100%; }
+    header #generate_new_array.theme_1 {
+      border-right: 0.3vw double white; }
+    header #generate_new_array.theme_2 {
+      border-right: 0.3vw double white; }
+    header #generate_new_array.theme_3 {
+      border-right: 0.3vw double white; }
+    header #generate_new_array.theme_4 {
+      border-right: 0.3vw double white; }
     header #generate_new_array h3 {
       margin: 0; }
       header #generate_new_array h3:hover {
@@ -38,8 +64,15 @@ header {
     justify-content: center;
     align-items: center;
     width: 35%;
-    height: 100%;
-    border-right: 0.3vw double white; }
+    height: 100%; }
+    header #change_array_size_and_speed.theme_1 {
+      border-right: 0.3vw double white; }
+    header #change_array_size_and_speed.theme_2 {
+      border-right: 0.3vw double white; }
+    header #change_array_size_and_speed.theme_3 {
+      border-right: 0.3vw double white; }
+    header #change_array_size_and_speed.theme_4 {
+      border-right: 0.3vw double white; }
     header #change_array_size_and_speed input {
       margin-left: 1vw;
       width: 25%; }
@@ -48,16 +81,36 @@ header {
     justify-content: center;
     align-items: center;
     width: 30%;
-    height: 100%;
-    border-right: 0.3vw double white; }
+    height: 100%; }
+    header #sorting_algorithms.theme_1 {
+      border-right: 0.3vw double white; }
+    header #sorting_algorithms.theme_2 {
+      border-right: 0.3vw double white; }
+    header #sorting_algorithms.theme_3 {
+      border-right: 0.3vw double white; }
+    header #sorting_algorithms.theme_4 {
+      border-right: 0.3vw double white; }
     header #sorting_algorithms #sorting_algorithm_select {
       margin-left: 1vw;
       font-size: 1.3vw;
-      border: .1vw solid white;
       outline: none;
-      background-color: #3235cd;
-      color: white;
       padding: .5vw; }
+      header #sorting_algorithms #sorting_algorithm_select.theme_1 {
+        border-right: 0.1vw double white;
+        background-color: black;
+        color: #4AF626; }
+      header #sorting_algorithms #sorting_algorithm_select.theme_2 {
+        border-right: 0.1vw double white;
+        background-color: #1e3c72;
+        color: white; }
+      header #sorting_algorithms #sorting_algorithm_select.theme_3 {
+        border-right: 0.1vw double white;
+        background-color: #32864f;
+        color: #9fb4e6; }
+      header #sorting_algorithms #sorting_algorithm_select.theme_4 {
+        border-right: 0.1vw double white;
+        background-color: #542e71;
+        color: #fb3640; }
   header #start_sort {
     display: flex;
     justify-content: center;
@@ -70,10 +123,21 @@ header {
 
 section {
   height: calc(100% - 2 * 5vw);
-  background-color: #2C1775;
-  box-shadow: inset 0 0 3vw black;
   padding-top: 1vw;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  position: relative; }
+  section.theme_1 {
+    background-color: black;
+    box-shadow: inset 0 0 3vw rgba(255, 255, 255, 0); }
+  section.theme_2 {
+    background-color: #2C1775;
+    box-shadow: inset 0 0 3vw black; }
+  section.theme_3 {
+    background-color: #564a4a;
+    box-shadow: inset 0 0 3vw black; }
+  section.theme_4 {
+    background-color: #a799b7;
+    box-shadow: inset 0 0 3vw rgba(255, 255, 255, 0); }
   section #sorting_array_container {
     width: 80%;
     margin: auto;
@@ -81,21 +145,63 @@ section {
     display: flex;
     justify-content: center; }
     section #sorting_array_container .visual_array_item {
-      color: white;
       text-align: center;
       padding-top: 1vw;
-      background-color: #5959ad;
-      margin: 0 .1vw;
-      font-size: 1vw; }
+      font-size: 1vw;
+      text-shadow: 0.1vw 0.1vw black; }
+      section #sorting_array_container .visual_array_item.theme_1 {
+        background-color: white;
+        border: 0.1vw solid black; }
+      section #sorting_array_container .visual_array_item.theme_2 {
+        background-color: #5959ad;
+        border: 0.1vw solid #17176d; }
+      section #sorting_array_container .visual_array_item.theme_3 {
+        background-color: #4aa96c;
+        border: 0.1vw solid black; }
+      section #sorting_array_container .visual_array_item.theme_4 {
+        background-color: white;
+        border: 0.1vw solid black; }
+  section #change_sorting_speed {
+    position: absolute;
+    bottom: 1%;
+    left: 5%;
+    width: 30%;
+    text-align: center; }
+    section #change_sorting_speed h3 {
+      margin: 0; }
+    section #change_sorting_speed input {
+      width: 100%; }
+  section .themes_container {
+    position: absolute;
+    bottom: 3%;
+    right: 1%;
+    display: flex; }
+    section .themes_container > div {
+      margin: 0 1vw;
+      text-align: center; }
+      section .themes_container > div:hover {
+        color: crimson; }
+    section .themes_container .themes {
+      width: 7vw;
+      height: 3vw; }
 
 footer {
   height: 5vw;
-  background: linear-gradient(to right, #1e3c72, #2a5298);
-  color: white;
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: inset 0 0 2vw white; }
+  justify-content: center; }
+  footer.theme_1 {
+    background: linear-gradient(#000000, #23241f);
+    box-shadow: inset 0 0 2vw white; }
+  footer.theme_2 {
+    background: linear-gradient(to right, #1e3c72, #2a5298);
+    box-shadow: inset 0 0 2vw white; }
+  footer.theme_3 {
+    background: #f55c47;
+    box-shadow: inset 0 0 2vw white; }
+  footer.theme_4 {
+    background: #fdca40;
+    box-shadow: inset 0 0 2vw white; }
 
 /*////////////////////////////////////////////////////////////
 /////////////////////// MEDIA QUERIES ////////////////////////
@@ -108,12 +214,26 @@ footer {
     height: 15vw; }
     header #generate_new_array {
       width: calc(50% - 0.3vw);
-      height: 50%;
-      border-bottom: 0.1vw solid white; }
+      height: 50%; }
+      header #generate_new_array.theme_1 {
+        border-right: 0.3vw double white; }
+      header #generate_new_array.theme_2 {
+        border-right: 0.3vw double white; }
+      header #generate_new_array.theme_3 {
+        border-right: 0.3vw double white; }
+      header #generate_new_array.theme_4 {
+        border-right: 0.3vw double white; }
     header #change_array_size_and_speed {
       width: calc(50% - 0.3vw);
-      height: 50%;
-      border-bottom: 0.1vw solid white; }
+      height: 50%; }
+      header #change_array_size_and_speed.theme_1 {
+        border-right: 0.3vw double white; }
+      header #change_array_size_and_speed.theme_2 {
+        border-right: 0.3vw double white; }
+      header #change_array_size_and_speed.theme_3 {
+        border-right: 0.3vw double white; }
+      header #change_array_size_and_speed.theme_4 {
+        border-right: 0.3vw double white; }
     header #sorting_algorithms {
       width: calc(50% - 0.3vw);
       height: 50%; }
@@ -137,26 +257,54 @@ footer {
     header #generate_new_array {
       width: 100%;
       border-right: 0;
-      height: 25%;
-      border-bottom: 0.1vw solid white; }
+      height: 25%; }
+      header #generate_new_array.theme_1 {
+        border-right: 0.3vw double white; }
+      header #generate_new_array.theme_2 {
+        border-right: 0.3vw double white; }
+      header #generate_new_array.theme_3 {
+        border-right: 0.3vw double white; }
+      header #generate_new_array.theme_4 {
+        border-right: 0.3vw double white; }
     header #change_array_size_and_speed {
       width: 100%;
       border-right: 0;
-      height: 25%;
-      border-bottom: 0.1vw solid white; }
+      height: 25%; }
+      header #change_array_size_and_speed.theme_1 {
+        border-right: 0.3vw double white; }
+      header #change_array_size_and_speed.theme_2 {
+        border-right: 0.3vw double white; }
+      header #change_array_size_and_speed.theme_3 {
+        border-right: 0.3vw double white; }
+      header #change_array_size_and_speed.theme_4 {
+        border-right: 0.3vw double white; }
     header #sorting_algorithms {
       width: 100%;
       border-right: 0;
-      height: 25%;
-      border-bottom: 0.1vw solid white; }
+      height: 25%; }
+      header #sorting_algorithms.theme_1 {
+        border-right: 0.3vw double white; }
+      header #sorting_algorithms.theme_2 {
+        border-right: 0.3vw double white; }
+      header #sorting_algorithms.theme_3 {
+        border-right: 0.3vw double white; }
+      header #sorting_algorithms.theme_4 {
+        border-right: 0.3vw double white; }
       header #sorting_algorithms #sorting_algorithm_select {
         margin-left: 2vw;
         font-size: 1.8vw; }
     header #start_sort {
-      border-bottom: 0.1vw solid white;
       width: 100%;
       border-right: 0;
       height: 25%; }
+      header #start_sort.theme_1 {
+        border-right: 0.3vw double white; }
+      header #start_sort.theme_2 {
+        border-right: 0.3vw double white; }
+      header #start_sort.theme_3 {
+        border-right: 0.3vw double white; }
+      header #start_sort.theme_4 {
+        border-right: 0.3vw double white; }
   section {
     height: calc(100% - 8 * 5vw); }
   footer {
