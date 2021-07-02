@@ -94,15 +94,25 @@ function arraySortingSpeedChanged() {
     time = sortingSpeedMax - Number($('#sorting_speed').val());
 }
 
-function itemColoring(index, color, color_2, DOM) {
+function itemColoringForBubbleSort(index, color, color_2, DOM) {
     $(DOM[index]).css({ "backgroundColor": color });
     $(DOM[index + 1]).css({ "backgroundColor": color_2 });
 }
 
-function itemDetachAndAttach(index, DOM) {
-    let detachedElem = $(DOM[index]).detach();
-    $(detachedElem).insertAfter($(DOM[index + 1]));
+function itemColoringForMergeSort(id1, id2, color, color_2, DOM) {
+    $(`#${id1}`).css({"backgroundColor": color });
+    $(`#${id2}`).css({"backgroundColor": color_2 });
 }
+
+function itemDetachAndAttach(index, index2, DOM) {
+    let detachedElem = $(DOM[index]).detach();
+    $(detachedElem).insertAfter($(DOM[index2]));
+}
+
+// function itemDetachAndAttachForMerge(id1, id2, DOM) {
+//     let detachedElem = $(DOM[index]).detach();
+//     $(detachedElem).insertAfter($(DOM[index2]));
+// }
 
 function Sort() {
     if (sorting) return
@@ -114,7 +124,7 @@ function Sort() {
     if (sortType === "bubble") {
         bubbleSort();
     } else if (sortType === "merge") {
-        mergeSort();
+        console.log(mergeSort(array));
     } else if (sortType === "heap") {
         heapSort();
     } else if (sortType === "quick") {
@@ -123,74 +133,143 @@ function Sort() {
 
 }
 
-async function bubbleSort() {
-    let domElements = $('.visual_array_item');
-    let sortedCount = 1;
 
-    while (!bubbleSorted) {
-        for (let i = 0; i < array.length - sortedCount; i++) {
-            if (stopSorting) return
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////// BUBBLE SORT  /////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**/async function bubbleSort() {
+/**/    let domElements = $('.visual_array_item');
+/**/    let sortedCount = 1;
+/**/
+/**/    while (!bubbleSorted) {
+/**/        for (let i = 0; i < array.length - sortedCount; i++) {
+/**/            if (stopSorting) return
+/**/
+/**/            itemColoringForBubbleSort(i, checkingColor, checkingColor, domElements) // Coloring items in array that are being checked
+/**/            await timer(time);
+/**/
+/**/            if (array[i] > array[i + 1]) {
+/**/                itemColoringForBubbleSort(i, wrongColor, wrongColor, domElements) // Coloring items in array that were wrong placed
+/**/                await timer(time);
+/**/
+/**/                itemDetachAndAttach(i, i + 1, domElements)
+/**/                domElements = $('.visual_array_item'); // Reassigning dom elements array to match dom
+/**/                await timer(time);
+/**/
+/**/                itemColoringForBubbleSort(i, correctedColor, correctedColor, domElements) // Coloring items in array that were fixed and placed correctly
+/**/                await timer(time);
+/**/
+/**/                allTrue = false;
+/**/                let arrItem = array[i + 1]; // Changing array items correspondingly
+/**/                array[i + 1] = array[i];
+/**/                array[i] = arrItem
+/**/
+/**/            } else {
+/**/                itemColoringForBubbleSort(i, correctedColor, correctedColor, domElements) // Coloring items in array that were already placed correctly
+/**/                await timer(time);
+/**/            }
+/**/
+/**/            //Checking if the biggest item is at the end and coloring
+/**/            if (i == array.length - sortedCount - 1) {
+/**/                itemColoringForBubbleSort(i, staticColor, allCorrectColor, domElements) // Coloring item in array that was placed at the end
+/**/                await timer(time);
+/**/            } else {
+/**/                itemColoringForBubbleSort(i, staticColor, staticColor, domElements) // Coloring items in array that were already checked and placed correctyl
+/**/                await timer(time);
+/**/            }
+/**/            
+/**/        }
+/**/        if (allTrue) {
+/**/            bubbleSorted = true;
+/**/        }
+/**/        allTrue = true;
+/**/        sortedCount++
+/**/    }
+/**/
+/**/    sortedCount = 1;
+/**/    $('.visual_array_item').css({ "backgroundColor": allCorrectColor })
+/**/    bubbleSorted = false;
+/**/    sorting = false;
+/**/    $('#array_range').attr("disabled", false);
+/**/}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////// BUBBLE SORT  /////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            itemColoring(i, checkingColor, checkingColor, domElements) // Coloring items in array that are being checked
-            await timer(time);
 
-            if (array[i] > array[i + 1]) {
-                itemColoring(i, wrongColor, wrongColor, domElements) // Coloring items in array that were wrong placed
-                await timer(time);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////// MERGE SORT  /////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+async function merge(arr_left, arr_right, visual_arr_left, visual_arr_right, domElements) {
+    let l_i = 0;
+    let r_i = 0;
+    let sortedArray = [];
 
-                itemDetachAndAttach(i, domElements)
-                domElements = $('.visual_array_item'); // Reassigning dom elements array to match dom
-                await timer(time);
+    while (l_i < arr_left.length && r_i < arr_right.length) {
+        let leftEl = arr_left[l_i];
+        let rightEl = arr_right[r_i];
+        let leftElVisID = $(visual_arr_left[l_i]).attr('id');
+        let righElVisID = $(visual_arr_right[r_i]).attr('id');
 
-                itemColoring(i, correctedColor, correctedColor, domElements) // Coloring items in array that were fixed and placed correctly
-                await timer(time);
+        // itemColoringForMergeSort(leftElVisID, righElVisID, checkingColor, checkingColor, domElements)
+        // await timer(time);
 
-                allTrue = false;
-                let arrItem = array[i + 1]; // Changing array items correspondingly
-                array[i + 1] = array[i];
-                array[i] = arrItem
+        if (leftEl < rightEl) {correctedColor
+            // itemColoringForMergeSort(leftElVisID, righElVisID, correctedColor, correctedColor, domElements)
+            // await timer(time);
 
-            } else {
-                itemColoring(i, correctedColor, correctedColor, domElements) // Coloring items in array that were already placed correctly
-                await timer(time);
-            }
+            sortedArray.push(leftEl)
+            l_i++;
 
-            //Checking if the biggest item is at the end and coloring
-            if (i == array.length - sortedCount - 1) {
-                itemColoring(i, staticColor, allCorrectColor, domElements) // Coloring item in array that was placed at the end
-                await timer(time);
-            } else {
-                itemColoring(i, staticColor, staticColor, domElements) // Coloring items in array that were already checked and placed correctyl
-                await timer(time);
-            }
-            
+        } else {
+            // itemColoringForMergeSort(leftElVisID, righElVisID, wrongColor, staticColor, domElements)
+            // await timer(time);
+
+            // itemDetachAndAttachForMerge(leftElVisID, righElVisID, domElements)
+
+            sortedArray.push(rightEl)
+            r_i++;
+
+            // itemColoringForMergeSort(leftElVisID, righElVisID, correctedColor, correctedColor, domElements)
+            // await timer(time);
         }
-        if (allTrue) {
-            bubbleSorted = true;
-        }
-        allTrue = true;
-        sortedCount++
+
+        // itemColoringForMergeSort(leftElVisID, righElVisID, staticColor, staticColor, domElements)
+        // await timer(time);
     }
 
-    sortedCount = 1;
-    $('.visual_array_item').css({ "backgroundColor": allCorrectColor })
-    bubbleSorted = false;
-    sorting = false;
-    $('#array_range').attr("disabled", false);
+    while (arr_left.length) {
+        sortedArray.push(arr_left.shift(arr_left[0]))
+    }
+
+    while (arr_right.length) {
+        sortedArray.push(arr_right.shift(arr_right[0]))
+    }
+
+    console.log([...sortedArray])
+    
+    return [...sortedArray]
 }
 
+function mergeSort(array) {
+    if (array.length <= 1) {
+        return array;
+    }
 
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-
-async function mergeSort() {
     let domElements = $('.visual_array_item');
-}
+    let len = array.length;
+    let middleItemIndex = Math.floor(len / 2);
+    let arr_left = array.slice(0, middleItemIndex);
+    let arr_right = array.slice(middleItemIndex);
+    let visual_arr_left = domElements.slice(0, middleItemIndex);
+    let visual_arr_right = domElements.slice(middleItemIndex);
 
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
+    return merge(mergeSort(arr_left), mergeSort(arr_right), visual_arr_left, visual_arr_right, domElements)
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////// MERGE SORT  /////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 async function heapSort() {
