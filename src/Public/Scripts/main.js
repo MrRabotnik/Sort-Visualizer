@@ -104,15 +104,36 @@ function itemColoringForMergeSort(id1, id2, color, color_2, DOM) {
     $(`#${id2}`).css({"backgroundColor": color_2 });
 }
 
-function itemDetachAndAttach(index, index2, DOM) {
-    let detachedElem = $(DOM[index]).detach();
-    $(detachedElem).insertAfter($(DOM[index2]));
+function itemColoringForHeapSort(index, index2, color, color_2, DOM) {
+    $(DOM[index]).css({ "backgroundColor": color });
+    $(DOM[index2]).css({ "backgroundColor": color_2 });
 }
+
+
+
 
 // function itemDetachAndAttachForMerge(id1, id2, DOM) {
 //     let detachedElem = $(DOM[index]).detach();
 //     $(detachedElem).insertAfter($(DOM[index2]));
 // }
+
+function itemDetachAndAttach(index, index2, DOM) {
+    let detachedElem = $(DOM[index]).detach();
+    $(detachedElem).insertAfter($(DOM[index2]));
+}
+
+jQuery.fn.swapWith = function(to) {
+    return this.each(function() {
+        var copy_to = $(to).clone(true);
+        var copy_from = $(this).clone(true);
+        $(to).replaceWith(copy_from);
+        $(this).replaceWith(copy_to);
+    });
+};
+
+function itemDetachAndAttachForHeap(index, index2, DOM, arrayLength) {
+    $(DOM[index]).swapWith($(DOM[index2]));
+}
 
 function Sort() {
     if (sorting) return
@@ -124,13 +145,12 @@ function Sort() {
     if (sortType === "bubble") {
         bubbleSort();
     } else if (sortType === "merge") {
-        console.log(mergeSort(array));
+        mergeSort();
     } else if (sortType === "heap") {
         heapSort();
     } else if (sortType === "quick") {
         quickSort();
     }
-
 }
 
 
@@ -194,12 +214,22 @@ function Sort() {
 /**/}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////// BUBBLE SORT  /////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+/*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////// MERGE SORT  /////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 async function merge(arr_left, arr_right, visual_arr_left, visual_arr_right, domElements) {
     let l_i = 0;
     let r_i = 0;
@@ -266,19 +296,143 @@ function mergeSort(array) {
 
     return merge(mergeSort(arr_left), mergeSort(arr_right), visual_arr_left, visual_arr_right, domElements)
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////// MERGE SORT  /////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 
+
+
+
+
+
+
+/*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////// HEAP SORT  /////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 async function heapSort() {
-    console.log('heapSort')
+    let domElements = $(".visual_array_item");
+    let arrayLength = arraySize;
+    while (arrayLength >= 2) { // Looping Till we are left with 2 items in heapifying array
+        domElements = $(".visual_array_item");
+        for (let i = Math.floor(arrayLength / 2 - 1); i >= 0; i--) { // Lopping till
+            let parentNode = array[i];
+            let leftChildNode = array[2 * i + 1] ? 2 * i + 1 == arrayLength ? 0 : array[2 * i + 1]  : 0;
+            let rightChildNode = array[2 * i + 2] ? 2 * i + 2 == arrayLength ? 0 : array[2 * i + 2] : 0;
+            
+            $(domElements[i]).css({ "backgroundColor": checkingColor });
+            $(domElements[2 * i + 1]).css({ "backgroundColor": checkingColor });
+            if (2 * i + 2 !== arrayLength) {
+                $(domElements[2 * i + 2]).css({ "backgroundColor": checkingColor });
+                await timer(time);
+            }
+            
+            if (leftChildNode > rightChildNode && leftChildNode > parentNode) {
+                $(domElements[i]).css({ "backgroundColor": staticColor });
+                $(domElements[2 * i + 1]).css({ "backgroundColor": staticColor });
+                if (2 * i + 2 !== arrayLength) {
+                    $(domElements[2 * i + 2]).css({ "backgroundColor": staticColor });
+                    await timer(time);
+                }
+                itemColoringForHeapSort(i, 2 * i + 1, wrongColor, wrongColor, domElements);
+                await timer(time);
+                itemDetachAndAttachForHeap(i, 2 * i + 1, domElements, arrayLength);
+                domElements = $(".visual_array_item");
+                await timer(time);
+                itemColoringForHeapSort(i, 2 * i + 1, correctedColor, correctedColor, domElements);
+                await timer(time);
+                itemColoringForHeapSort(i, 2 * i + 1, staticColor, staticColor, domElements);
+                await timer(time);
+                let arrItem = array[2 * i + 1]; // Changing array items correspondingly
+                array[2 * i + 1] = array[i];
+                array[i] = arrItem;
+            } else if (rightChildNode >= leftChildNode && rightChildNode > parentNode) {
+                $(domElements[i]).css({ "backgroundColor": staticColor });
+                $(domElements[2 * i + 1]).css({ "backgroundColor": staticColor });
+                if (2 * i + 2 !== arrayLength) {
+                    $(domElements[2 * i + 2]).css({ "backgroundColor": staticColor });
+                    await timer(time);
+                }
+                itemColoringForHeapSort(i, 2 * i + 2, wrongColor, wrongColor, domElements);
+                await timer(time);
+                itemDetachAndAttachForHeap(i, 2 * i + 2, domElements, arrayLength);
+                domElements = $(".visual_array_item");
+                await timer(time);
+                itemColoringForHeapSort(i, 2 * i + 2, correctedColor, correctedColor, domElements);
+                await timer(time);
+                itemColoringForHeapSort(i, 2 * i + 2, staticColor, staticColor, domElements);
+                await timer(time);
+                let arrItem = array[2 * i + 2]; // Changing array items correspondingly
+                array[2 * i + 2] = array[i];
+                array[i] = arrItem;
+            } else {
+                $(domElements[i]).css({ "backgroundColor": correctedColor });
+                $(domElements[2 * i + 1]).css({ "backgroundColor": correctedColor });
+                if (2 * i + 2 !== arrayLength) {
+                    $(domElements[2 * i + 2]).css({ "backgroundColor": correctedColor });
+                    await timer(time);
+                }
+                $(domElements[i]).css({ "backgroundColor": staticColor });
+                $(domElements[2 * i + 1]).css({ "backgroundColor": staticColor });
+                if (2 * i + 2 !== arrayLength) {
+                    $(domElements[2 * i + 2]).css({ "backgroundColor": staticColor });
+                    await timer(time);
+                }
+            }
+        }
+        itemColoringForHeapSort(0, arrayLength - 1, wrongColor, wrongColor, domElements);
+        await timer(time);
+        itemDetachAndAttachForHeap(0, arrayLength - 1, domElements, arrayLength);
+        domElements = $(".visual_array_item");
+        await timer(time);
+        itemColoringForHeapSort(0, arrayLength - 1, correctedColor, correctedColor, domElements);
+        await timer(time);
+        if (arrayLength == 2) {
+            itemColoringForHeapSort(0, arrayLength - 1, allCorrectColor, allCorrectColor, domElements);
+            await timer(time);
+        } else {
+            itemColoringForHeapSort(0, arrayLength - 1, staticColor, allCorrectColor, domElements);
+            await timer(time);
+        }
+        let heapMax = array[0];
+        array[0] = array[arrayLength - 1];
+        array[arrayLength - 1] = heapMax;
+        arrayLength--;
+    }
+    
+    sorting = false;
+    $("#array_range").attr("disabled", false);
 }
 
+
+/*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////// HEAP SORT  /////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+
+
+
+
+
+
+
+
+
+
+/*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////// QUICK SORT  /////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 async function quickSort() {
-    console.log('quickSort')
+
 }
+/*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////// QUICK SORT  /////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+
+
+
 
 function changeTheme(theme) {
     $('.theme_1').removeClass('theme_1')
