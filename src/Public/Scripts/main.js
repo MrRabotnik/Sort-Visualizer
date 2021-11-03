@@ -52,7 +52,7 @@ function createArrayFromCustomValues() {
     arraySize = arr.length;
 
     for (let i in arr) {
-        if (isNaN(arr[i])) {
+        if (isNaN(arr[i]) || arr[i] == "") {
             alert("Please enter valid values (numbers separated by comma)")
             arraySize = Number($("#array_range").val());
             removeArray();
@@ -66,11 +66,18 @@ function createArrayFromCustomValues() {
             createArray();
             return;
         }
+        if (arraySize < 4) {
+            alert("Please enter more than 3 item");
+            arraySize = Number($("#array_range").val());
+            removeArray();
+            createArray();
+            return;
+        }
         let visualArrayItem = '';
         if (arraySize <= 30) {
-          visualArrayItem += `<div class="visual_array_item ${theme_class}" id="item_${i}">${arr[i]}</div>`;
+            visualArrayItem += `<div class="visual_array_item ${theme_class}" id="item_${i}">${arr[i]}</div>`;
         } else {
-          visualArrayItem += `<div class="visual_array_item ${theme_class}" id="item_${i}"></div>`;
+            visualArrayItem += `<div class="visual_array_item ${theme_class}" id="item_${i}"></div>`;
         }
         $('#sorting_array_container').append(visualArrayItem);
         definingItemsHeight(i, Number(arr[i].trim()))
