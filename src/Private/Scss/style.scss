@@ -244,12 +244,29 @@ section{
     #change_sorting_speed{
         position: absolute;
         bottom: 1%;
-        left: 5%;
+        left: 1%;
         width: 30%;
         text-align: center;
 
         h3{
             margin: 0;
+        }
+
+        input{
+            width: 100%;
+        }
+    }
+
+    .creat_array_input_container{
+        position: absolute;
+        bottom: 1%;
+        left: 33%;
+        width: 27%;
+        text-align: center;
+
+        h3{
+            margin: 0;
+            margin-bottom: .5vw;
         }
 
         input{
