@@ -3,6 +3,7 @@
 /////////////////////////////////////////////*/
 let array = [];
 let arraySize = Number($('#array_range').val());
+let customInputvalues = $("#enter_values_input").val();
 let sortType;
 let sortingSpeedMax = $('#sorting_speed').attr('max')
 let bubbleSorted = false;
@@ -39,6 +40,40 @@ function createArray() {
         }
         $('#sorting_array_container').append(visualArrayItem);
         definingItemsHeight(i, rndNum)
+        visualArrayItem = ""
+    };
+
+    definingItemsWidth();
+};
+
+function createArrayFromCustomValues() {
+    let theme_class = $('body').attr('class');
+    let arr = customInputvalues.trim().split(",");
+    arraySize = arr.length;
+
+    for (let i in arr) {
+        if (isNaN(arr[i])) {
+            alert("Please enter valid values (numbers separated by comma)")
+            arraySize = Number($("#array_range").val());
+            removeArray();
+            createArray();
+            return
+        }
+        if (arr[i] > 181) {
+            alert("Please enter valid values (numbers must not exceed 180)");
+            arraySize = Number($("#array_range").val());
+            removeArray();
+            createArray();
+            return;
+        }
+        let visualArrayItem = '';
+        if (arraySize <= 30) {
+          visualArrayItem += `<div class="visual_array_item ${theme_class}" id="item_${i}">${arr[i]}</div>`;
+        } else {
+          visualArrayItem += `<div class="visual_array_item ${theme_class}" id="item_${i}"></div>`;
+        }
+        $('#sorting_array_container').append(visualArrayItem);
+        definingItemsHeight(i, Number(arr[i].trim()))
         visualArrayItem = ""
     };
 
@@ -489,6 +524,14 @@ $(document).on('input', '#array_range', function () {
     arraySizeChanged();
     removeArray();
     createArray();
+});
+
+$(document).on('keypress', '#enter_values_input', function (e) {
+    if (e.key == "Enter") {
+        removeArray();
+        customInputvalues = $("#enter_values_input").val();
+        createArrayFromCustomValues();
+    }
 });
 
 $(document).on('input', '#sorting_speed', function () {
