@@ -9,7 +9,7 @@ let sortingSpeedMax = $('#sorting_speed').attr('max')
 let bubbleSorted = false;
 let allTrue = true;
 let sorting = false;
-let time;
+let time = sortingSpeedMax - $("#sorting_speed").val();
 let staticColor = "#5959ad";
 let checkingColor = "orange";
 let wrongColor = "crimson";
@@ -111,22 +111,9 @@ function arraySizeChanged() {
     arraySize = Number($('#array_range').val());
     if (arraySize > 0 && arraySize < 20) {
         $('.visual_array_item').css({ 'transition': '.2s' })
-        time = 200
-    } else if (arraySize >= 0 && arraySize <= 70) {
-        time = 50
+    } else if (arraySize > 20) {
         $('.visual_array_item').css({ 'transition': 0 })
-    } else if (arraySize > 70 && arraySize <= 100) {
-        time = 20
-        $('.visual_array_item').css({ 'transition': 0 })
-    }else if (arraySize > 100 && arraySize <= 150) {
-        $('.visual_array_item').css({ 'transition': 0 })
-        time = 2
-    } else if (arraySize > 150 && arraySize <= 200) {
-        $('.visual_array_item').css({ 'transition': 0 })
-        time = 1
     }
-
-    $('#sorting_speed').val(sortingSpeedMax - time);
 };
 
 function getValueOfSortSelect() {
@@ -188,7 +175,7 @@ function Sort() {
     if (sortType === "bubble") {
         bubbleSort();
     } else if (sortType === "merge") {
-        mergeSort();
+        console.log(mergeSort(array));
     } else if (sortType === "heap") {
         heapSort();
     } else if (sortType === "quick") {
@@ -208,8 +195,6 @@ function Sort() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**/async function bubbleSort() {
 /**/    let domElements = $('.visual_array_item');
-    console.log(domElements);
-    console.log(array)
 /**/    let sortedCount = 1;
 /**/
 /**/    while (!bubbleSorted) {
@@ -281,7 +266,7 @@ function Sort() {
 /*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////// MERGE SORT  /////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-async function merge(arr_left, arr_right, visual_arr_left, visual_arr_right, domElements) {
+function merge(arr_left, arr_right, visual_arr_left, visual_arr_right, domElements) {
     let l_i = 0;
     let r_i = 0;
     let sortedArray = [];
@@ -292,31 +277,13 @@ async function merge(arr_left, arr_right, visual_arr_left, visual_arr_right, dom
         let leftElVisID = $(visual_arr_left[l_i]).attr('id');
         let righElVisID = $(visual_arr_right[r_i]).attr('id');
 
-        // itemColoringForMergeSort(leftElVisID, righElVisID, checkingColor, checkingColor, domElements)
-        // await timer(time);
-
         if (leftEl < rightEl) {correctedColor
-            // itemColoringForMergeSort(leftElVisID, righElVisID, correctedColor, correctedColor, domElements)
-            // await timer(time);
-
             sortedArray.push(leftEl)
             l_i++;
-
         } else {
-            // itemColoringForMergeSort(leftElVisID, righElVisID, wrongColor, staticColor, domElements)
-            // await timer(time);
-
-            // itemDetachAndAttachForMerge(leftElVisID, righElVisID, domElements)
-
             sortedArray.push(rightEl)
             r_i++;
-
-            // itemColoringForMergeSort(leftElVisID, righElVisID, correctedColor, correctedColor, domElements)
-            // await timer(time);
         }
-
-        // itemColoringForMergeSort(leftElVisID, righElVisID, staticColor, staticColor, domElements)
-        // await timer(time);
     }
 
     while (arr_left.length) {
@@ -327,8 +294,7 @@ async function merge(arr_left, arr_right, visual_arr_left, visual_arr_right, dom
         sortedArray.push(arr_right.shift(arr_right[0]))
     }
 
-    console.log([...sortedArray])
-    
+
     return [...sortedArray]
 }
 
@@ -361,103 +327,102 @@ function mergeSort(array) {
 /*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////// HEAP SORT  /////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
-
-async function heapSort() {
-    let domElements = $(".visual_array_item");
-    let arrayLength = array.length;
-    
-    while (arrayLength >= 2) { // Looping Till we are left with 2 items in heapifying array
-        // domElements = $(".visual_array_item");
-        for (let i = Math.floor(arrayLength / 2 - 1); i >= 0; i--) { // Lopping till
-            let parentNode = array[i];
-            let leftChildNode = array[2 * i + 1] ? 2 * i + 1 == arrayLength ? 0 : array[2 * i + 1]  : 0;
-            let rightChildNode = array[2 * i + 2] ? 2 * i + 2 == arrayLength ? 0 : array[2 * i + 2] : 0;
-            
-            $(domElements[i]).css({ "backgroundColor": checkingColor });
-            $(domElements[2 * i + 1]).css({ "backgroundColor": checkingColor });
-            if (2 * i + 2 !== arrayLength) {
-                $(domElements[2 * i + 2]).css({ "backgroundColor": checkingColor });
-                await timer(time);
-            }
-            
-            if (leftChildNode > rightChildNode && leftChildNode > parentNode) {
-                $(domElements[i]).css({ "backgroundColor": staticColor });
-                $(domElements[2 * i + 1]).css({ "backgroundColor": staticColor });
-                if (2 * i + 2 !== arrayLength) {
-                    $(domElements[2 * i + 2]).css({ "backgroundColor": staticColor });
-                    await timer(time);
-                }
-                itemColoringForHeapSort(i, 2 * i + 1, wrongColor, wrongColor, domElements);
-                await timer(time);
-                itemDetachAndAttachForHeap(i, 2 * i + 1, domElements, arrayLength);
-                domElements = $(".visual_array_item");
-                await timer(time);
-                itemColoringForHeapSort(i, 2 * i + 1, correctedColor, correctedColor, domElements);
-                await timer(time);
-                itemColoringForHeapSort(i, 2 * i + 1, staticColor, staticColor, domElements);
-                await timer(time);
-                let arrItem = array[2 * i + 1]; // Changing array items correspondingly
-                array[2 * i + 1] = array[i];
-                array[i] = arrItem;
-            } else if (rightChildNode >= leftChildNode && rightChildNode > parentNode) {
-                $(domElements[i]).css({ "backgroundColor": staticColor });
-                $(domElements[2 * i + 1]).css({ "backgroundColor": staticColor });
-                if (2 * i + 2 !== arrayLength) {
-                    $(domElements[2 * i + 2]).css({ "backgroundColor": staticColor });
-                    await timer(time);
-                }
-                itemColoringForHeapSort(i, 2 * i + 2, wrongColor, wrongColor, domElements);
-                await timer(time);
-                itemDetachAndAttachForHeap(i, 2 * i + 2, domElements, arrayLength);
-                domElements = $(".visual_array_item");
-                await timer(time);
-                itemColoringForHeapSort(i, 2 * i + 2, correctedColor, correctedColor, domElements);
-                await timer(time);
-                itemColoringForHeapSort(i, 2 * i + 2, staticColor, staticColor, domElements);
-                await timer(time);
-                let arrItem = array[2 * i + 2]; // Changing array items correspondingly
-                array[2 * i + 2] = array[i];
-                array[i] = arrItem;
-            } else {
-                $(domElements[i]).css({ "backgroundColor": correctedColor });
-                $(domElements[2 * i + 1]).css({ "backgroundColor": correctedColor });
-                if (2 * i + 2 !== arrayLength) {
-                    $(domElements[2 * i + 2]).css({ "backgroundColor": correctedColor });
-                    await timer(time);
-                }
-                $(domElements[i]).css({ "backgroundColor": staticColor });
-                $(domElements[2 * i + 1]).css({ "backgroundColor": staticColor });
-                if (2 * i + 2 !== arrayLength) {
-                    $(domElements[2 * i + 2]).css({ "backgroundColor": staticColor });
-                    await timer(time);
-                }
-            }
-        }
-        itemColoringForHeapSort(0, arrayLength - 1, wrongColor, wrongColor, domElements);
-        await timer(time);
-        itemDetachAndAttachForHeap(0, arrayLength - 1, domElements, arrayLength);
-        domElements = $(".visual_array_item");
-        await timer(time);
-        itemColoringForHeapSort(0, arrayLength - 1, correctedColor, correctedColor, domElements);
-        await timer(time);
-        if (arrayLength == 2) {
-            itemColoringForHeapSort(0, arrayLength - 1, allCorrectColor, allCorrectColor, domElements);
-            await timer(time);
-        } else {
-            itemColoringForHeapSort(0, arrayLength - 1, staticColor, allCorrectColor, domElements);
-            await timer(time);
-        }
-        let heapMax = array[0];
-        array[0] = array[arrayLength - 1];
-        array[arrayLength - 1] = heapMax;
-        arrayLength--;
-    }
-    
-    sorting = false;
-    $("#array_range").attr("disabled", false);
-}
-
-
+/**/
+/**/async function heapSort() {
+/**/    let domElements = $(".visual_array_item");
+/**/    let arrayLength = array.length;
+/**/
+/**/    while (arrayLength >= 2) { // Looping Till we are left with 2 items in heapifying array
+/**/        for (let i = Math.floor(arrayLength / 2 - 1); i >= 0; i--) { // Lopping till
+/**/            let parentNode = array[i];
+/**/            let leftChildNode = array[2 * i + 1] ? 2 * i + 1 == arrayLength ? 0 : array[2 * i + 1]  : 0;
+/**/            let rightChildNode = array[2 * i + 2] ? 2 * i + 2 == arrayLength ? 0 : array[2 * i + 2] : 0;
+/**/            
+/**/            $(domElements[i]).css({ "backgroundColor": checkingColor });
+/**/            $(domElements[2 * i + 1]).css({ "backgroundColor": checkingColor });
+/**/            if (2 * i + 2 !== arrayLength) {
+/**/                $(domElements[2 * i + 2]).css({ "backgroundColor": checkingColor });
+/**/                await timer(time);
+/**/            }
+/**/            
+/**/            if (leftChildNode > rightChildNode && leftChildNode > parentNode) {
+/**/                $(domElements[i]).css({ "backgroundColor": staticColor });
+/**/                $(domElements[2 * i + 1]).css({ "backgroundColor": staticColor });
+/**/                if (2 * i + 2 !== arrayLength) {
+/**/                    $(domElements[2 * i + 2]).css({ "backgroundColor": staticColor });
+/**/                    await timer(time);
+/**/                }
+/**/                itemColoringForHeapSort(i, 2 * i + 1, wrongColor, wrongColor, domElements);
+/**/                await timer(time);
+/**/                itemDetachAndAttachForHeap(i, 2 * i + 1, domElements, arrayLength);
+/**/                domElements = $(".visual_array_item");
+/**/                await timer(time);
+/**/                itemColoringForHeapSort(i, 2 * i + 1, correctedColor, correctedColor, domElements);
+/**/                await timer(time);
+/**/                itemColoringForHeapSort(i, 2 * i + 1, staticColor, staticColor, domElements);
+/**/                await timer(time);
+/**/                let arrItem = array[2 * i + 1]; // Changing array items correspondingly
+/**/                array[2 * i + 1] = array[i];
+/**/                array[i] = arrItem;
+/**/            } else if (rightChildNode >= leftChildNode && rightChildNode > parentNode) {
+/**/                $(domElements[i]).css({ "backgroundColor": staticColor });
+/**/                $(domElements[2 * i + 1]).css({ "backgroundColor": staticColor });
+/**/                if (2 * i + 2 !== arrayLength) {
+/**/                    $(domElements[2 * i + 2]).css({ "backgroundColor": staticColor });
+/**/                    await timer(time);
+/**/                }
+/**/                itemColoringForHeapSort(i, 2 * i + 2, wrongColor, wrongColor, domElements);
+/**/                await timer(time);
+/**/                itemDetachAndAttachForHeap(i, 2 * i + 2, domElements, arrayLength);
+/**/                domElements = $(".visual_array_item");
+/**/                await timer(time);
+/**/                itemColoringForHeapSort(i, 2 * i + 2, correctedColor, correctedColor, domElements);
+/**/                await timer(time);
+/**/                itemColoringForHeapSort(i, 2 * i + 2, staticColor, staticColor, domElements);
+/**/                await timer(time);
+/**/                let arrItem = array[2 * i + 2]; // Changing array items correspondingly
+/**/                array[2 * i + 2] = array[i];
+/**/                array[i] = arrItem;
+/**/            } else {
+/**/                $(domElements[i]).css({ "backgroundColor": correctedColor });
+/**/                $(domElements[2 * i + 1]).css({ "backgroundColor": correctedColor });
+/**/                if (2 * i + 2 !== arrayLength) {
+/**/                    $(domElements[2 * i + 2]).css({ "backgroundColor": correctedColor });
+/**/                    await timer(time);
+/**/                }
+/**/                $(domElements[i]).css({ "backgroundColor": staticColor });
+/**/                $(domElements[2 * i + 1]).css({ "backgroundColor": staticColor });
+/**/                if (2 * i + 2 !== arrayLength) {
+/**/                    $(domElements[2 * i + 2]).css({ "backgroundColor": staticColor });
+/**/                    await timer(time);
+/**/                }
+/**/            }
+/**/        }
+/**/        itemColoringForHeapSort(0, arrayLength - 1, wrongColor, wrongColor, domElements);
+/**/        await timer(time);
+/**/        itemDetachAndAttachForHeap(0, arrayLength - 1, domElements, arrayLength);
+/**/        domElements = $(".visual_array_item");
+/**/        await timer(time);
+/**/        itemColoringForHeapSort(0, arrayLength - 1, correctedColor, correctedColor, domElements);
+/**/        await timer(time);
+/**/        if (arrayLength == 2) {
+/**/            itemColoringForHeapSort(0, arrayLength - 1, allCorrectColor, allCorrectColor, domElements);
+/**/            await timer(time);
+/**/        } else {
+/**/            itemColoringForHeapSort(0, arrayLength - 1, staticColor, allCorrectColor, domElements);
+/**/            await timer(time);
+/**/        }
+/**/        let heapMax = array[0];
+/**/        array[0] = array[arrayLength - 1];
+/**/        array[arrayLength - 1] = heapMax;
+/**/        arrayLength--;
+/**/    }
+/**/    
+/**/    sorting = false;
+/**/    $("#array_range").attr("disabled", false);
+/**/}
+/**/
+/**/
 /*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////// HEAP SORT  /////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/

@@ -44,7 +44,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 15%;
+    width: 20%;
     height: 100%; }
     header #generate_new_array.theme_1 {
       border-right: 0.3vw double white; }
@@ -63,7 +63,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 35%;
+    width: 30%;
     height: 100%; }
     header #change_array_size_and_speed.theme_1 {
       border-right: 0.3vw double white; }
@@ -75,7 +75,7 @@ header {
       border-right: 0.3vw double white; }
     header #change_array_size_and_speed input {
       margin-left: 1vw;
-      width: 25%; }
+      width: 40%; }
   header #sorting_algorithms {
     display: flex;
     justify-content: center;
