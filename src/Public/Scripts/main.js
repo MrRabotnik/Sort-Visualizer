@@ -139,7 +139,14 @@ function itemColoringForHeapSort(index, index2, color, color_2, DOM) {
     $(DOM[index2]).css({ "backgroundColor": color_2 });
 }
 
+function itemColoringForSelectionSort(index, color, DOM) {
+    $(DOM[index]).css({ "backgroundColor": color });
+}
 
+function itemColoringForInsertionSort(index, index2, color, color_2, DOM) {
+    $(DOM[index]).css({ "backgroundColor": color });
+    $(DOM[index2]).css({ "backgroundColor": color_2 });
+}
 
 
 // function itemDetachAndAttachForMerge(id1, id2, DOM) {
@@ -161,7 +168,11 @@ jQuery.fn.swapWith = function(to) {
     });
 };
 
-function itemDetachAndAttachForHeap(index, index2, DOM, arrayLength) {
+function itemDetachAndAttachForHeap(index, index2, DOM) {
+    $(DOM[index]).swapWith($(DOM[index2]));
+}
+
+function itemDetachAndAttachForSelection(index, index2, DOM) {
     $(DOM[index]).swapWith($(DOM[index2]));
 }
 
@@ -354,7 +365,7 @@ function mergeSort(array) {
 /**/                }
 /**/                itemColoringForHeapSort(i, 2 * i + 1, wrongColor, wrongColor, domElements);
 /**/                await timer(time);
-/**/                itemDetachAndAttachForHeap(i, 2 * i + 1, domElements, arrayLength);
+/**/                itemDetachAndAttachForHeap(i, 2 * i + 1, domElements);
 /**/                domElements = $(".visual_array_item");
 /**/                await timer(time);
 /**/                itemColoringForHeapSort(i, 2 * i + 1, correctedColor, correctedColor, domElements);
@@ -373,7 +384,7 @@ function mergeSort(array) {
 /**/                }
 /**/                itemColoringForHeapSort(i, 2 * i + 2, wrongColor, wrongColor, domElements);
 /**/                await timer(time);
-/**/                itemDetachAndAttachForHeap(i, 2 * i + 2, domElements, arrayLength);
+/**/                itemDetachAndAttachForHeap(i, 2 * i + 2, domElements);
 /**/                domElements = $(".visual_array_item");
 /**/                await timer(time);
 /**/                itemColoringForHeapSort(i, 2 * i + 2, correctedColor, correctedColor, domElements);
@@ -400,7 +411,7 @@ function mergeSort(array) {
 /**/        }
 /**/        itemColoringForHeapSort(0, arrayLength - 1, wrongColor, wrongColor, domElements);
 /**/        await timer(time);
-/**/        itemDetachAndAttachForHeap(0, arrayLength - 1, domElements, arrayLength);
+/**/        itemDetachAndAttachForHeap(0, arrayLength - 1, domElements);
 /**/        domElements = $(".visual_array_item");
 /**/        await timer(time);
 /**/        itemColoringForHeapSort(0, arrayLength - 1, correctedColor, correctedColor, domElements);
@@ -449,11 +460,73 @@ async function quickSort() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 /*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////// SELECTION SORT  /////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 async function selectionSort() {
+    let shouldSwapIndex = 0;
+    let currentRunMinimumIndex = 0
+    let domElements = $(".visual_array_item");
 
+    while(shouldSwapIndex != arraySize){
+        $(domElements[shouldSwapIndex]).css({ "backgroundColor": checkingColor });
+
+        for(let i = shouldSwapIndex + 1; i < arraySize; i++){
+            itemColoringForSelectionSort(i, checkingColor, domElements);
+            await timer(time);
+
+            if(array[i] < array[currentRunMinimumIndex]){
+                if(currentRunMinimumIndex !== shouldSwapIndex){
+                    itemColoringForSelectionSort(currentRunMinimumIndex, staticColor, domElements);
+                }
+                currentRunMinimumIndex = i
+                itemColoringForSelectionSort(currentRunMinimumIndex, checkingColor, domElements);
+                await timer(time);
+            }else{
+                itemColoringForSelectionSort(i, correctedColor, domElements);
+                await timer(time);
+                itemColoringForSelectionSort(i, staticColor, domElements);
+                await timer(time);
+            }
+        }
+
+        itemColoringForSelectionSort(shouldSwapIndex, wrongColor, domElements);
+        itemColoringForSelectionSort(currentRunMinimumIndex, wrongColor, domElements);
+        await timer(time);
+
+        itemDetachAndAttachForSelection(shouldSwapIndex, currentRunMinimumIndex, domElements)
+        domElements = $(".visual_array_item");
+        await timer(time);
+
+        itemColoringForSelectionSort(shouldSwapIndex, correctedColor, domElements);
+        itemColoringForSelectionSort(currentRunMinimumIndex, correctedColor, domElements);
+        await timer(time);
+
+        itemColoringForSelectionSort(currentRunMinimumIndex, staticColor, domElements);
+        itemColoringForSelectionSort(shouldSwapIndex, allCorrectColor, domElements);
+        await timer(time);
+
+        let arrItem = array[currentRunMinimumIndex]
+        array[currentRunMinimumIndex] = array[shouldSwapIndex]
+        array[shouldSwapIndex] = arrItem
+
+        shouldSwapIndex++;
+        currentRunMinimumIndex = shouldSwapIndex
+    }
+
+    sorting = false;
+    $("#array_range").attr("disabled", false);
 }
 /*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////// SELECTION SORT  /////////////////////////////////////////////////////////////////
@@ -462,11 +535,55 @@ async function selectionSort() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 /*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////// INSERTION SORT  /////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 async function insertionSort() {
+    let domElements = $(".visual_array_item");
 
+    for(let i = 1; i < arraySize; i++){
+        let currentTarget = i;
+        itemColoringForInsertionSort(currentTarget - 1, currentTarget, checkingColor, checkingColor, domElements);
+        await timer(time);
+        if(array[currentTarget] < array[currentTarget - 1]){
+            while(array[currentTarget] < array[currentTarget - 1]){
+                itemColoringForInsertionSort(currentTarget - 1, currentTarget, wrongColor, wrongColor, domElements);
+                await timer(time);
+                itemDetachAndAttach(currentTarget - 1, currentTarget, domElements);
+                domElements = $(".visual_array_item");
+                await timer(time);
+                itemColoringForInsertionSort(currentTarget - 1, currentTarget, correctedColor, correctedColor, domElements);
+                await timer(time);
+                itemColoringForInsertionSort(currentTarget - 1, currentTarget, staticColor, staticColor, domElements);
+                await timer(time);
+                let arrItem = array[currentTarget];
+                array[currentTarget] = array[currentTarget - 1];
+                array[currentTarget - 1] = arrItem
+                currentTarget--;
+            }
+        }else{
+            itemColoringForInsertionSort(currentTarget - 1, currentTarget, correctedColor, correctedColor, domElements);
+            await timer(time);
+            itemColoringForInsertionSort(currentTarget - 1, currentTarget, staticColor, staticColor, domElements);
+            await timer(time);  
+        }
+    }
+
+    $(domElements).css("backgroundColor", allCorrectColor)
+
+    sorting = false;
+    $("#array_range").attr("disabled", false);
 }
 /*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////// INSERTION SORT  /////////////////////////////////////////////////////////////////
@@ -557,8 +674,10 @@ $(document).on('input', '#sorting_speed', function () {
 });
 
 $('#generate_new_array').on('click', () => {
-    removeArray();
-    createArray();
+    if(!sorting){
+        removeArray();
+        createArray();
+    }
 })
 
 $("#start_sort").on('click', Sort)
